@@ -3,10 +3,10 @@
 #include<windows.h>
 using namespace std;
 
-const int xMax = 79;
-const int xMin = 3;
-const int yMax = 24;
-const int yMin = 2;	
+const int xMax = 80;
+const int xMin = 1;
+const int yMax = 30;
+const int yMin = 1;	
 	
 class Rana{
 protected:
@@ -121,21 +121,21 @@ public:
 	void marcarBordes();
 };
 void Juego::marcarBordes(){
-	for (int i = 1; i < 81; i++){
+	for (int i = 1; i < 80; i++){
 		gotoxy(i, 1);
-		cout << "-";
+		cout << "*";
 	}
-	for (int i = 1; i < 81; i++){
-		gotoxy (i, 25);
-		cout << "-";
+	for (int i = 1; i < 80; i++){
+		gotoxy (i, 30);
+		cout << "*";
 	}
-	for (int i = 1; i < 25; i++){
+	for (int i = 1; i < 30; i++){
 		gotoxy(1, i);
-		cout << "-";
+		cout << "*";
 	}
-	for (int i = 1; i < 25; i++){
+	for (int i = 1; i < 30; i++){
 		gotoxy(80, i);
-		cout << "-";
+		cout << "*";
 	}
 }
 
