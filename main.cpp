@@ -12,11 +12,11 @@ class Rana{
 protected:
 	int x, y;
 	void borrar();
-	void dibujar();
 private:
 	int velocidadRana = 1000;
 public:
 	Rana();
+	void dibujar();
 	void moverRana();
 };
 Rana::Rana(){
@@ -81,11 +81,11 @@ class Camion : virtual public Rana {
 protected:
 	int camion = xMax;
 	const int velocidad = 100;
-	void dibujarCamion();
 	void borrarCamion();
 public:
 	Camion();
 	void moverCamion();
+	void dibujarCamion();
 };
 Camion::Camion(){
 	camion = xMax;
@@ -96,6 +96,7 @@ void Camion::moverCamion(){
 	borrarCamion();
 	camion--;
 	if (camion < xMin){
+		borrarCamion();
 		camion = xMax;
 	}
 	dibujarCamion();
@@ -141,11 +142,14 @@ void Juego::marcarBordes(){
 void Juego::Jugar(){
 	bool juegoActivo = true;
 	marcarBordes();
-	Rana R;
+	Rana *R;
 	Camion C;
 	Autito A;
+	R = &A;
+	R->dibujar();
+	C.dibujarCamion();
 	while (juegoActivo){
-	R.moverRana();
+	R->moverRana();
 	C.moverCamion();
 	A.moverAutito();
 	}
