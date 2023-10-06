@@ -8,21 +8,31 @@ const int xMin = 1;
 const int yMax = 30;
 const int yMin = 1;	
 	
-class Rana{
+class Personaje{
 protected:
 	int x, y;
-	void borrar();
-private:
-	int velocidadRana = 1000;
+	virtual void mover() = 0;
+	virtual void borrar() = 0;
+	virtual void dibujar() = 0;
 public:
+	Personaje();
+};
+Personaje::Personaje(){}
+
+class Rana : public Personaje{
+private:
+	int vidas;
+	int velocidad = 1000;
+public: 
 	Rana();
-	void dibujar();
-	void moverRana();
+	void mover() override;
+	void dibujar() override;
+	void borrar() override;
 };
 Rana::Rana(){
-	
+	vidas = 3;
 }
-void Rana::moverRana(){
+void Rana::mover(){
 	if (_kbhit()) {
 		borrar();
 		char tecla = _getch();
@@ -31,7 +41,7 @@ void Rana::moverRana(){
 		if (tecla == 'w' && y > yMin) { y--; }
 		if (tecla == 's' && y < yMax) { y++; }
 	}
-	Sleep(velocidadRana);
+	Sleep(velocidad);
 }
 void Rana::dibujar(){
 	gotoxy(x, y);
@@ -44,79 +54,78 @@ void Rana::borrar(){
 	gotoxy(x, y);
 	cout << " ";
 }
-class Autito : virtual public Rana{
+class Autito :  public Personaje{
 protected:
 	int autito = xMin;
 	const int velocidad = 100;
-	void dibujarAutito();
-	void borrarAutito();
 public:
 	Autito();
-	void moverAutito();
+	void mover() override;
+	void dibujar() override;
+	void borrar() override;
 };
 Autito::Autito(){
 	autito = xMin;
 }
-void Autito::dibujarAutito(){
+void Autito::dibujar(){
 	gotoxy(autito, 5);
 	textcolor(BLUE);
 	cout << "A";
 }
-void Autito::moverAutito(){
+void Autito::mover(){
 	while(true){
-	borrarAutito();
+	borrar();
 	autito++;
 	if (autito > xMax){
 		autito = xMin;
 	}
-	dibujarAutito();
+	dibujar();
 	Sleep(velocidad);
 	}
 }
-void Autito::borrarAutito(){
+void Autito::borrar(){
 	gotoxy(autito, y);
 	cout << " ";
 }
-class Camion : virtual public Rana {
+class Camion : public Personaje {
 protected:
 	int camion = xMax;
 	const int velocidad = 100;
-	void borrarCamion();
 public:
 	Camion();
-	void moverCamion();
-	void dibujarCamion();
+	void mover() override;
+	void dibujar() override;
+	void borrar() override;
 };
 Camion::Camion(){
 	camion = xMax;
 }
 
-void Camion::moverCamion(){
+void Camion::mover(){
 	while(true){
-	borrarCamion();
+	borrar();
 	camion--;
 	if (camion < xMin){
-		borrarCamion();
+		borrar();
 		camion = xMax;
 	}
-	dibujarCamion();
+	dibujar();
 	Sleep(velocidad);
 	}
 }
-void Camion::dibujarCamion(){
+void Camion::dibujar(){
 	gotoxy(camion, 10);
 	textcolor(RED);
 	cout << "C";
 }
-void Camion::borrarCamion(){
+void Camion::borrar(){
 	gotoxy(camion, y);
 	cout << " ";
 }
 
-class Juego : virtual public Rana, public Camion, public Autito {
+class Juego : public Rana, public Camion, public Autito {
 public:
-	Juego() : Rana(), Camion(){}
-	virtual~Juego(){}
+	Juego(){}
 	void Jugar();
 	void marcarBordes();
 };
@@ -142,16 +151,15 @@ void Juego::marcarBordes(){
 void Juego::Jugar(){
 	bool juegoActivo = true;
 	marcarBordes();
-	Rana *R;
+	Rana R;
 	Camion C;
 	Autito A;
-	R = &A;
-	R->dibujar();
-	C.dibujarCamion();
 	while (juegoActivo){
-	R->moverRana();
-	C.moverCamion();
-	A.moverAutito();
+	R.dibujar();
+	C.dibujar();
+	R.mover();
+	C.mover();
+	A.mover();
 	}
 }
 int main (int argc, char *argv[]) {
