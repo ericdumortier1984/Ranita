@@ -11,101 +11,116 @@ const int yMin = 1;
 class Personaje{
 protected:
 	int x, y;
-	virtual void mover() = 0;
-	virtual void borrar() = 0;
-	virtual void dibujar() = 0;
 public:
 	Personaje();
+	void borrar();
 };
-Personaje::Personaje(){}
-
-class Rana : public Personaje{
-private:
-	int vidas;
-	int velocidad = 1000;
-public: 
-	Rana();
-	void mover() override;
-	void dibujar() override;
-	void borrar() override;
-};
-Rana::Rana(){
-	vidas = 3;
+Personaje::Personaje(){
+	x = 0;
+	y = 0;
 }
-void Rana::mover(){
-	if (_kbhit()) {
-		borrar();
-		char tecla = _getch();
-		if (tecla == 'a' && x > xMin) { x--; }
-		if (tecla == 'd' && x < xMax) { x++; }
-		if (tecla == 'w' && y > yMin) { y--; }
-		if (tecla == 's' && y < yMax) { y++; }
-	}
-	Sleep(velocidad);
-}
-void Rana::dibujar(){
-	gotoxy(x, y);
-	x = 40;
-	y = 24;
-	textcolor(GREEN);
-	cout << "0";
-}
-void Rana::borrar(){
+void Personaje::borrar(){
 	gotoxy(x, y);
 	cout << " ";
 }
-class Autito :  public Personaje{
+
+class Rana : public Personaje{
+private:
+	int velocidad = 100;
 protected:
-	int autito = xMin;
-	const int velocidad = 100;
-public:
-	Autito();
-	void mover() override;
-	void dibujar() override;
-	void borrar() override;
+	int vidas = 3;
+public: 
+	Rana();
+	void dibujarVida();
+	void perderVida();
+	void mover();
+	void dibujar();
 };
-Autito::Autito(){
-	autito = xMin;
+Rana::Rana(){
+	gotoxy(x, y);
+	x = 40;
+	y = 28;
 }
-void Autito::dibujar(){
-	gotoxy(autito, 5);
+void Rana::dibujarVida(){
+	gotoxy(xMax - 10, yMin);
+	textcolor(WHITE);
+	cout << "Vidas " << vidas;
+}
+void Rana::perderVida(){
+	vidas--;
+}
+void Rana::mover(){
+	while(vidas > 0){
+	if (_kbhit()) {
+		borrar();
+		char tecla = _getch();
+		if (tecla == 'a' && x > xMin + 2) { x--; }
+		if (tecla == 'd' && x < xMax - 2) { x++; }
+		if (tecla == 'w' && y > yMin + 2) { y--; }
+		if (tecla == 's' && y < yMax - 2) { y++; }
+		dibujar();
+	}
+	Sleep(velocidad);
+	}
+}
+void Rana::dibujar(){
+	gotoxy(x, y);
+	textcolor(GREEN);
+	cout << "0";
+}
+
+class Automobil : public Personaje{
+protected:
+	int automobil = xMin;
+	int velocidad = 50;
+public:
+	Automobil();
+	void mover();
+	void dibujar();
+};
+Automobil::Automobil(){
+	gotoxy(automobil, 15);
+	automobil = xMin;
+}
+void Automobil::dibujar(){
+	gotoxy(automobil + 2, 15);
 	textcolor(BLUE);
 	cout << "A";
 }
-void Autito::mover(){
-	while(true){
+void Automobil::mover(){
+	while(automobil){
 	borrar();
-	autito++;
-	if (autito > xMax){
-		autito = xMin;
+	automobil++;
+	if (automobil > xMax){
+		automobil = xMin;
 	}
 	dibujar();
 	Sleep(velocidad);
 	}
 }
-void Autito::borrar(){
-	gotoxy(autito, y);
-	cout << " ";
-}
 class Camion : public Personaje {
 protected:
 	int camion = xMax;
-	const int velocidad = 100;
+	int velocidad = 50;
 public:
 	Camion();
-	void mover() override;
-	void dibujar() override;
-	void borrar() override;
+	void mover();
+	void dibujar();
 };
 Camion::Camion(){
+	gotoxy(camion, 10);
 	camion = xMax;
 }
-
+void Camion::dibujar(){
+	gotoxy(camion - 2, 10);
+	textcolor(RED);
+	cout << "C";
+}
 void Camion::mover(){
-	while(true){
+	while(camion){
 	borrar();
 	camion--;
-	if (camion < xMin){
+	if (camion < xMin + 3){
 		borrar();
 		camion = xMax;
 	}
@@ -113,22 +128,14 @@ void Camion::mover(){
 	Sleep(velocidad);
 	}
 }
-void Camion::dibujar(){
-	gotoxy(camion, 10);
-	textcolor(RED);
-	cout << "C";
-}
-void Camion::borrar(){
-	gotoxy(camion, y);
-	cout << " ";
-}
 
-class Juego : public Rana, public Camion, public Autito {
+class Juego : public Rana, public Camion, public Automobil {
 public:
 	Juego(){}
-	void Jugar();
+	void Iniciar();
 	void marcarBordes();
 };
+
 void Juego::marcarBordes(){
 	for (int i = 1; i < 80; i++){
 		gotoxy(i, 1);
@@ -148,22 +155,29 @@ void Juego::marcarBordes(){
 	}
 }
 
-void Juego::Jugar(){
-	bool juegoActivo = true;
+void Juego::Iniciar(){
 	marcarBordes();
-	Rana R;
-	Camion C;
-	Autito A;
-	while (juegoActivo){
-	R.dibujar();
-	C.dibujar();
-	R.mover();
-	C.mover();
-	A.mover();
+	bool JuegoActivo = true;
+	while(JuegoActivo){
+		Rana Ranita;
+		Camion Camioncito;
+		Automobil Autito;
+		
+		Ranita.dibujar();
+		Ranita.mover();
+		Ranita.dibujarVida();
+		
+		Camioncito.dibujar();
+		Camioncito.mover();
+		
+		Autito.dibujar();
+		Autito.mover();
 	}
 }
 int main (int argc, char *argv[]) {
+	
 	Juego J;
-	J.Jugar();
+	J.Iniciar();
+	
 	return 0;
 }
