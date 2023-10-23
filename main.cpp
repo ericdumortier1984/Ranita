@@ -134,6 +134,7 @@ public:
 	Juego(){}
 	void Iniciar();
 	void marcarBordes();
+	void ocultarCursor();
 };
 
 void Juego::marcarBordes(){
@@ -155,8 +156,14 @@ void Juego::marcarBordes(){
 	}
 }
 
+void Juego::ocultarCursor(){
+	CONSOLE_CURSOR_INFO cci = {100, FALSE};
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cci);
+}
+
 void Juego::Iniciar(){
 	marcarBordes();
+	ocultarCursor();
 	bool JuegoActivo = true;
 	while(JuegoActivo){
 		Rana Ranita;
