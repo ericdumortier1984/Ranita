@@ -9,79 +9,90 @@ const int yMax = 30;
 const int yMin = 1;	
 	
 class Personaje{
-protected:
+private:
+	int velocidad = 100;
 	int x, y;
+	int vidas = 3;
 public:
 	Personaje();
+	void dibujarVida();
+	void perderVida();
+	void mover();
+	void dibujar();
 	void borrar();
 };
 Personaje::Personaje(){
-	x = 0;
-	y = 0;
+	gotoxy(x, y);
+	x = 40;
+	y = 28;
 }
+
+void Personaje::dibujarVida(){
+	gotoxy(xMax - 10, yMin);
+	textcolor(WHITE);
+	cout << "Vidas " << vidas;
+}
+
+void Personaje::perderVida(){
+	vidas--;
+}
+
+void Personaje::mover(){
+	while(vidas > 0){
+		if (_kbhit()) {
+			borrar();
+			char tecla = _getch();
+			if (tecla == 'a' && x > xMin + 2) { x--; }
+			if (tecla == 'd' && x < xMax - 2) { x++; }
+			if (tecla == 'w' && y > yMin + 2) { y--; }
+			if (tecla == 's' && y < yMax - 2) { y++; }
+			dibujar();
+		}
+		Sleep(velocidad);
+	}
+}
+
 void Personaje::borrar(){
 	gotoxy(x, y);
 	cout << " ";
 }
 
-class Rana : public Personaje{
-private:
-	int velocidad = 100;
-protected:
-	int vidas = 3;
-public: 
-	Rana();
-	void dibujarVida();
-	void perderVida();
-	void mover();
-	void dibujar();
-};
-Rana::Rana(){
-	gotoxy(x, y);
-	x = 40;
-	y = 28;
-}
-void Rana::dibujarVida(){
-	gotoxy(xMax - 10, yMin);
-	textcolor(WHITE);
-	cout << "Vidas " << vidas;
-}
-void Rana::perderVida(){
-	vidas--;
-}
-void Rana::mover(){
-	while(vidas > 0){
-	if (_kbhit()) {
-		borrar();
-		char tecla = _getch();
-		if (tecla == 'a' && x > xMin + 2) { x--; }
-		if (tecla == 'd' && x < xMax - 2) { x++; }
-		if (tecla == 'w' && y > yMin + 2) { y--; }
-		if (tecla == 's' && y < yMax - 2) { y++; }
-		dibujar();
-	}
-	Sleep(velocidad);
-	}
-}
-void Rana::dibujar(){
+void Personaje::dibujar(){
 	gotoxy(x, y);
 	textcolor(GREEN);
 	cout << "0";
 }
 
-class Automobil : public Personaje{
+class Obstaculos {
+protected:
+	int x, y;
+	int velocidad;
+public:
+	Obstaculos(){
+		int velocidad;
+	}
+	void dibujar();
+	void borrar();
+};
+
+
+class Automobil : public Obstaculos {
 protected:
 	int automobil = xMin;
-	int velocidad = 50;
 public:
 	Automobil();
-	void mover();
-	void dibujar();
+	bool update();
 };
 Automobil::Automobil(){
 	gotoxy(automobil, 15);
 	automobil = xMin;
 }
+
+void Automobil::borrar(){
+	gotoxy(x, y);
+	cout << " ";
+}
+
 void Automobil::dibujar(){
 	gotoxy(automobil + 2, 15);
 	textcolor(BLUE);
@@ -98,7 +109,7 @@ void Automobil::mover(){
 	Sleep(velocidad);
 	}
 }
-class Camion : public Personaje {
+class Camion : public Automobil {
 protected:
 	int camion = xMax;
 	int velocidad = 50;
@@ -129,7 +140,7 @@ void Camion::mover(){
 	}
 }
 
-class Juego : public Rana, public Camion, public Automobil {
+class Juego : public Personaje, public Camion, public Automobil {
 public:
 	Juego(){}
 	void Iniciar();
@@ -166,7 +177,7 @@ void Juego::Iniciar(){
 	ocultarCursor();
 	bool JuegoActivo = true;
 	while(JuegoActivo){
-		Rana Ranita;
+		Personaje Ranita;
 		Camion Camioncito;
 		Automobil Autito;
 		
