@@ -18,7 +18,7 @@ current_source=main.cpp
 path_char=\
 [source]
 path=main.cpp
-cursor=161:1
+cursor=190:0
 open=true
 [config]
 name=Debug_Win32

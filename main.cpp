@@ -7,37 +7,49 @@ const int xMax = 80;
 const int xMin = 1;
 const int yMax = 30;
 const int yMin = 1;	
-	
+
 class Personaje{
-private:
-	int velocidad = 100;
+protected:
 	int x, y;
-	int vidas = 3;
 public:
 	Personaje();
+	void borrar();
+};
+Personaje::Personaje(){
+	x = 0;
+	y = 0;
+}
+void Personaje::borrar(){
+	gotoxy(x, y);
+	cout << " ";
+}
+
+class Rana : public Personaje{
+private:
+	int velocidad = 100;
+protected:
+	int vidas = 3;
+public: 
+	Rana();
 	void dibujarVida();
 	void perderVida();
 	void mover();
 	void dibujar();
-	void borrar();
 };
-Personaje::Personaje(){
+Rana::Rana(){
 	gotoxy(x, y);
 	x = 40;
 	y = 28;
 }
-
-void Personaje::dibujarVida(){
+void Rana::dibujarVida(){
 	gotoxy(xMax - 10, yMin);
 	textcolor(WHITE);
 	cout << "Vidas " << vidas;
 }
-
-void Personaje::perderVida(){
+void Rana::perderVida(){
 	vidas--;
 }
-
-void Personaje::mover(){
+void Rana::mover(){
 	while(vidas > 0){
 		if (_kbhit()) {
 			borrar();
@@ -51,48 +63,25 @@ void Personaje::mover(){
 		Sleep(velocidad);
 	}
 }
-
-void Personaje::borrar(){
-	gotoxy(x, y);
-	cout << " ";
-}
-
-void Personaje::dibujar(){
+void Rana::dibujar(){
 	gotoxy(x, y);
 	textcolor(GREEN);
 	cout << "0";
 }
 
-class Obstaculos {
-protected:
-	int x, y;
-	int velocidad;
-public:
-	Obstaculos(){
-		int velocidad;
-	}
-	void dibujar();
-	void borrar();
-};
-
-
-class Automobil : public Obstaculos {
+class Automobil : public Personaje{
 protected:
 	int automobil = xMin;
+	int velocidad = 50;
 public:
 	Automobil();
-	bool update();
+	void mover();
+	void dibujar();
 };
 Automobil::Automobil(){
 	gotoxy(automobil, 15);
 	automobil = xMin;
 }
-
-void Automobil::borrar(){
-	gotoxy(x, y);
-	cout << " ";
-}
-
 void Automobil::dibujar(){
 	gotoxy(automobil + 2, 15);
 	textcolor(BLUE);
@@ -100,16 +89,16 @@ void Automobil::dibujar(){
 }
 void Automobil::mover(){
 	while(automobil){
-	borrar();
-	automobil++;
-	if (automobil > xMax){
-		automobil = xMin;
-	}
-	dibujar();
-	Sleep(velocidad);
+		borrar();
+		automobil++;
+		if (automobil > xMax){
+			automobil = xMin;
+		}
+		dibujar();
+		Sleep(velocidad);
 	}
 }
-class Camion : public Automobil {
+class Camion : public Personaje {
 protected:
 	int camion = xMax;
 	int velocidad = 50;
@@ -129,18 +118,18 @@ void Camion::dibujar(){
 }
 void Camion::mover(){
 	while(camion){
-	borrar();
-	camion--;
-	if (camion < xMin + 3){
 		borrar();
-		camion = xMax;
-	}
-	dibujar();
-	Sleep(velocidad);
+		camion--;
+		if (camion < xMin + 3){
+			borrar();
+			camion = xMax;
+		}
+		dibujar();
+		Sleep(velocidad);
 	}
 }
 
-class Juego : public Personaje, public Camion, public Automobil {
+class Juego {
 public:
 	Juego(){}
 	void Iniciar();
@@ -175,21 +164,20 @@ void Juego::ocultarCursor(){
 void Juego::Iniciar(){
 	marcarBordes();
 	ocultarCursor();
+	Rana *rana = new Rana();
+	Camion *camion = new Camion();
+	Automobil *automobil = new Automobil();
 	bool JuegoActivo = true;
 	while(JuegoActivo){
-		Personaje Ranita;
-		Camion Camioncito;
-		Automobil Autito;
+		rana->dibujar();
+		camion->dibujar();
+		automobil->dibujar();
 		
-		Ranita.dibujar();
-		Ranita.mover();
-		Ranita.dibujarVida();
+		rana->mover();
+		camion->mover();
+		automobil->dibujar();
 		
-		Camioncito.dibujar();
-		Camioncito.mover();
 		
-		Autito.dibujar();
-		Autito.mover();
 	}
 }
 int main (int argc, char *argv[]) {
@@ -199,3 +187,4 @@ int main (int argc, char *argv[]) {
 	
 	return 0;
 }
+
