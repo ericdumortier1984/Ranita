@@ -49,7 +49,7 @@ void Rana::dibujar() {
 }
 
 void Rana::actualizar() {
-	while (vidas > 0) {
+	if (vidas > 0) {
 		if (_kbhit()) {
 			borrar();
 			char tecla = _getch();
@@ -81,7 +81,7 @@ void Automobil::dibujar() {
 	cout << "A";
 }
 void Automobil::actualizar() {
-	while(vidas > 0){
+	if(vidas > 0){
 		borrar();
 		x++;
 		if (x > xMax - 4){
@@ -112,7 +112,7 @@ void Camion::dibujar() {
 }
 
 void Camion::actualizar() {
-	while(vidas > 0){
+	if(vidas > 0){
 		borrar();
 		x--;
 		if (x < xMin + 2){
