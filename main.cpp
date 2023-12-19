@@ -11,7 +11,8 @@ const int yMin = 1;
 class Personaje{
 protected:
 	int velocidad;
-	int vidas = 3 ;
+	int vidas = 3;
+	int puntos = 0;
 public:
 	Personaje(int vel);
 	int x, y;
@@ -35,7 +36,12 @@ public:
 	Rana(int vel);
 	void dibujar();
 	void actualizar();
+	void reiniciarPosicion();
+	bool haLlegadoMeta = false;
+	bool haLlegado();
 	int obtenerVidas();
+	int puntajeInicial();
+	int obtenerPuntos();
 	int perderVidas();
 };
 
@@ -69,8 +75,25 @@ int Rana::obtenerVidas(){
 	return vidas;
 }
 
+int Rana::puntajeInicial(){
+	return puntos;
+}
+
+int Rana::obtenerPuntos(){
+	return puntos += 50;
+}
+
 int Rana::perderVidas(){
 	return vidas--;
+}
+
+void Rana::reiniciarPosicion(){
+	x = 40;
+	y = 28;
+}
+
+bool Rana::haLlegado(){
+	return haLlegadoMeta;
 }
 
 class Automobil : public Personaje {
@@ -146,8 +169,10 @@ public:
 	void marcarBordes();
 	void ocultarCursor();
 	void marcadorVidas();
+	void marcadorPuntaje();
 	void indicadorTeclas();
 	void chequearColisiones();
+	void llegarMeta();
 };
 
 void Juego::marcarBordes(){
@@ -170,12 +195,17 @@ void Juego::marcarBordes(){
 }
 
 void Juego::marcadorVidas(){
-	gotoxy(2, 2);
+	gotoxy(2, 3);
 	cout << "VIDAS: " << rana->obtenerVidas();
 }
 
+void Juego::marcadorPuntaje(){
+	gotoxy(65, 3);
+	cout << "PUNTOS: " << rana->puntajeInicial(); 
+}
+
 void Juego::indicadorTeclas(){
-	gotoxy(2, 3);
+	gotoxy(2, 2);
 	cout << "CONTROLES: A - IZQUIERDA, D - DERECHA, W - ARRIBA, S - ABAJO ";
 }
 
@@ -183,6 +213,15 @@ void Juego::chequearColisiones(){
 	if (rana->x == camion->x && rana->y == camion->y ||(rana->x == automobil->x && rana->y == automobil->y) ){
 		rana->perderVidas();
 		marcadorVidas();
+	}
+}
+
+void Juego::llegarMeta(){
+	if (rana->x == 4 && rana->y == 4){
+		rana->obtenerPuntos();
+		marcadorPuntaje();
+		rana->reiniciarPosicion();
+		rana->haLlegadoMeta = true;
 	}
 }
 
@@ -195,10 +234,12 @@ void Juego::iniciar(){
 	marcarBordes();
 	ocultarCursor();
 	marcadorVidas();
+	marcadorPuntaje();
 	indicadorTeclas();
 	bool JuegoActivo = true;
 	while(JuegoActivo){
 		chequearColisiones();
+		llegarMeta();
 		rana->actualizar();
 		automobil->actualizar();
 		camion->actualizar();
