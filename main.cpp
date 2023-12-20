@@ -11,7 +11,7 @@ const int yMin = 1;
 class Personaje{
 protected:
 	int velocidad;
-	int vidas = 3;
+	int vidas = 1;
 	int puntos = 0;
 public:
 	Personaje(int vel);
@@ -52,7 +52,7 @@ Rana::Rana(int vel) : Personaje(vel) {
 
 void Rana::dibujar() {
 	gotoxy(x, y);
-	textcolor(YELLOW);
+	textcolor(GREEN);
 	cout << "R";
 }
 
@@ -197,16 +197,19 @@ void Juego::marcarBordes(){
 }
 
 void Juego::marcadorVidas(){
+	textcolor(YELLOW);
 	gotoxy(2, 3);
 	cout << "VIDAS: " << rana->obtenerVidas();
 }
 
 void Juego::marcadorPuntaje(){
+	textcolor(YELLOW);
 	gotoxy(65, 3);
 	cout << "PUNTOS: " << rana->puntajeInicial(); 
 }
 
 void Juego::indicadorTeclas(){
+	textcolor(YELLOW);
 	gotoxy(2, 2);
 	cout << "CONTROLES: A - IZQUIERDA, D - DERECHA, W - ARRIBA, S - ABAJO ";
 }
@@ -229,6 +232,8 @@ void Juego::llegarMeta(){
 
 void Juego::finDelJuego(){
 	if (rana->obtenerVidas() <= 0){
+		textcolor(RED);
+		cout << "PERDISTE, INTENTA NUEVAMENTE!";
 		JuegoActivo = false;
 	}
 }
