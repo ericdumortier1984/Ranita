@@ -173,6 +173,8 @@ public:
 	void indicadorTeclas();
 	void chequearColisiones();
 	void llegarMeta();
+	void finDelJuego();
+	bool JuegoActivo = true;
 };
 
 void Juego::marcarBordes(){
@@ -225,6 +227,12 @@ void Juego::llegarMeta(){
 	}
 }
 
+void Juego::finDelJuego(){
+	if (rana->obtenerVidas() <= 0){
+		JuegoActivo = false;
+	}
+}
+
 void Juego::ocultarCursor(){
 	CONSOLE_CURSOR_INFO cci = {100, FALSE};
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cci);
@@ -236,13 +244,13 @@ void Juego::iniciar(){
 	marcadorVidas();
 	marcadorPuntaje();
 	indicadorTeclas();
-	bool JuegoActivo = true;
 	while(JuegoActivo){
 		chequearColisiones();
 		llegarMeta();
 		rana->actualizar();
 		automobil->actualizar();
 		camion->actualizar();
+		finDelJuego();
 	}
 }
 
