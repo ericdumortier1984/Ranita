@@ -232,8 +232,13 @@ void Juego::llegarMeta(){
 
 void Juego::finDelJuego(){
 	if (rana->obtenerVidas() <= 0){
-		textcolor(RED);
-		cout << "PERDISTE, INTENTA NUEVAMENTE!";
+		textcolor(WHITE);
+		gotoxy(28, 15);
+		cout << "P  E  R  D  I  S  T  E";
+		gotoxy(28, 16);
+		cout << "I  N  T  E  N  T  A  R  ";
+		gotoxy(25, 17);
+		cout << "N  U  E  V  A  M  E  N  T  E  !";
 		JuegoActivo = false;
 	}
 }
