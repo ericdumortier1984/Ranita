@@ -68,7 +68,6 @@ void Rana::actualizar() {
 			if (tecla == 'd' && x < xMax - 2) { x++; }
 			if (tecla == 'w' && y > yMin + 3) { y--; }
 			if (tecla == 's' && y < yMax - 2) { y++; }
-			tempo = clock();
 		}
 		dibujar();
 	}
@@ -126,7 +125,7 @@ void Automobil::actualizar() {
 			tempo = clock();
 		}
 		dibujar();
-		Sleep(velocidad);
+		//Sleep(velocidad);
 	}
 }
 
@@ -195,14 +194,14 @@ void Camioneta::actualizar() {
 
 class Juego {
 private:
-	bool metaOcupada[3]; // Array para controlar las posiciones de meta ocupadas
-	Rana* rana = new Rana(10);
+	bool metaOcupada[3];
+	Rana* rana = new Rana(100);
 	Automobil* automobil = new Automobil(2, 15 , 1);
 	Automobil* automobilDos = new Automobil(2, 25, 8);
 	Automobil* automobilTres = new Automobil(2, 17, 12);
 	Automobil* automobilCuatro = new Automobil(2, 8, 23);
 	Camion* camion = new Camion(78, 10, 9);
-	Camion* camionDos = new Camion(78, 5, 13);
+	Camion* camionDos = new Camion(78, 6, 13);
 	Camion* camionTres = new Camion(78, 20, 25);
 	Camion* camionCuatro = new Camion(78, 24, 7);
 	Camioneta* camioneta = new Camioneta(2, 19, 3);
@@ -216,6 +215,7 @@ public:
 	void marcarBordes();
 	void ocultarCursor();
 	void marcadorVidas();
+	void tituloDelJuego();
 	void marcadorPuntaje();
 	void indicadorTeclas();
 	void chequearColisiones();
@@ -226,13 +226,16 @@ public:
 };
 
 Juego::Juego(){
+	//Arreglo para determinar si la casilla de meta está ocupada o no
 	for (int i = 0; i < 2; i++) {
-		metaOcupada[i] = false; // Inicializar todas las posiciones de meta como no ocupadas
+		metaOcupada[i] = false; 
 	}
 }
 
 void Juego::marcarBordes(){
+	//Bordes de la pantalla de juego
 	for (int i = 1; i < 80; i++){
+		textcolor(BROWN);
 		gotoxy(i, 1);
 		cout << "*";
 	}
@@ -248,22 +251,40 @@ void Juego::marcarBordes(){
 		gotoxy(80, i);
 		cout << "*";
 	}
+	//Texto de ayuda
+	gotoxy(3, 4);
+	textcolor(WHITE);
+	cout << "META 1";
+	gotoxy(38, 4);
+	textcolor(WHITE);
+	cout << "META 2";
+	gotoxy(74, 4);
+	textcolor(WHITE);
+	cout << "META 3";
+	//Bordes de las casillas de meta
 	for (int i = 1; i < 4; i++){
-		gotoxy(i, 4);
+		textcolor(GREEN);
+		gotoxy(i, 5);
 		cout << "*";
 	}
 	for (int i = 5; i < 40; i++){
-		gotoxy(i, 4);
+		gotoxy(i, 5);
 		cout << "*";
 	}
 	for (int i = 41; i < 76; i++){
-		gotoxy(i, 4);
+		gotoxy(i, 5);
 		cout << "*";
 	}
 	for (int i = 77; i < 80; i++){
-		gotoxy(i, 4);
+		gotoxy(i, 5);
 		cout << "*";
 	}
+}
+
+void Juego::tituloDelJuego(){
+	textcolor(LIGHTGREEN);
+	gotoxy(36, 3);
+	cout << "-RANITA-";
 }
 
 void Juego::marcadorVidas(){
@@ -292,33 +313,35 @@ void Juego::chequearColisiones(){
 }
 
 void Juego::llegarMeta(){
+	//llegamos a la casilla, si la misma está ocupada se reinicia la posición pero sin sumar puntos
 	if ((rana->x == 4 && rana->y == 4) && !metaOcupada[0]) {
 		rana->obtenerPuntos();
 		marcadorPuntaje();
 		rana->reiniciarPosicion();
-		metaOcupada[0] = true; // Marcar la primera posición de meta como ocupada
+		metaOcupada[0] = true; 
 	}else if ((rana->x == 4 && rana->y == 4) && metaOcupada[0]) {
-		rana->reiniciarPosicion(); // Reiniciar la posición si la casilla de meta está ocupada
+		rana->reiniciarPosicion(); 
     }
 	if ((rana->x == 40 && rana->y == 4) && !metaOcupada[1]) {
 		rana->obtenerPuntos();
 		marcadorPuntaje();
 		rana->reiniciarPosicion();
-		metaOcupada[1] = true; // Marcar la primera posición de meta como ocupada
+		metaOcupada[1] = true;
 	}else if ((rana->x == 40 && rana->y == 4) && metaOcupada[1]) {
-		rana->reiniciarPosicion(); // Reiniciar la posición si la casilla de meta está ocupada
+		rana->reiniciarPosicion();
 	}
 	if ((rana->x == 76 && rana->y == 4) && !metaOcupada[2]) {
 		rana->obtenerPuntos();
 		marcadorPuntaje();
 		rana->reiniciarPosicion();
-		metaOcupada[2] = true; // Marcar la primera posición de meta como ocupada
+		metaOcupada[2] = true; 
 	}else if ((rana->x == 76 && rana->y == 4) && metaOcupada[2]) {
-		rana->reiniciarPosicion(); // Reiniciar la posición si la casilla de meta está ocupada
+		rana->reiniciarPosicion();
 	}
 }
 
 void Juego::finDelJuego(){
+	//Si vidas igual o menor a cero termina el juego de manera negativa
 	if (rana->obtenerVidas() <= 0){
 		textcolor(WHITE);
 		gotoxy(28, 15);
@@ -332,6 +355,7 @@ void Juego::finDelJuego(){
 }
 
 void Juego::ganaste(){
+	//Si obtenemos 150 puntos (casillas de meta completas)termina el juego de manera positiva
 	if (rana->puntajeInicial() == 150){
 		textcolor(WHITE);
 		gotoxy(28, 15);
@@ -350,6 +374,7 @@ void Juego::ocultarCursor(){
 void Juego::iniciar(){
 	marcarBordes();
 	ocultarCursor();
+	tituloDelJuego();
 	marcadorVidas();
 	marcadorPuntaje();
 	indicadorTeclas();
@@ -375,7 +400,6 @@ void Juego::iniciar(){
 }
 
 int main (int argc, char *argv[]) {
-	
 	Juego J;
 	J.iniciar();
 	
