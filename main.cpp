@@ -58,7 +58,7 @@ Rana::Rana(int vel) : Personaje(vel) {
 void Rana::dibujar() {
 	gotoxy(x, y);
 	textcolor(GREEN);
-	cout << "R";
+	cout << "^";
 }
 
 void Rana::actualizar() {
@@ -118,8 +118,8 @@ Automobil::Automobil(int _x, int _y, int vel) : Personaje (vel) {
 
 void Automobil::dibujar() {
 	gotoxy(x, y);
-	textcolor(BLUE);
-	cout << "A";
+	textcolor(LIGHTRED);
+	cout << ">";
 }
 void Automobil::actualizar() {
 	tiempoActual = clock();
@@ -151,8 +151,8 @@ Camion::Camion(int _x, int _y, int vel) : Personaje (vel) {
 
 void Camion::dibujar() {
 	gotoxy(x, y);
-	textcolor(RED);
-	cout << "C";
+	textcolor(LIGHTBLUE);
+	cout << "{";
 }
 
 void Camion::actualizar() {
@@ -185,8 +185,8 @@ Camioneta::Camioneta(int _x, int _y, int vel) : Personaje (vel) {
 
 void Camioneta::dibujar() {
 	gotoxy(x, y);
-	textcolor(YELLOW);
-	cout << "O";
+	textcolor(LIGHTCYAN);
+	cout << ">";
 }
 void Camioneta::actualizar() {
 	tiempoActual = clock();
@@ -212,14 +212,17 @@ private:
 	Automobil* automobilDos = new Automobil(2, 25, 45);
 	Automobil* automobilTres = new Automobil(2, 17, 38);
 	Automobil* automobilCuatro = new Automobil(2, 8, 23);
+	Automobil* automobilCinco = new Automobil(2, 22, 28);
 	Camion* camion = new Camion(78, 10, 35);
 	Camion* camionDos = new Camion(78, 6, 52);
 	Camion* camionTres = new Camion(78, 20, 25);
 	Camion* camionCuatro = new Camion(78, 24, 18);
+	Camion* camionCinco = new Camion(78, 9, 16);
 	Camioneta* camioneta = new Camioneta(2, 19, 40);
 	Camioneta* camionetaDos = new Camioneta(2, 21, 21);
 	Camioneta* camionetaTres = new Camioneta(2, 7, 19);
 	Camioneta* camionetaCuatro = new Camioneta(2, 26, 43);
+	Camioneta* camionetaCinco = new Camioneta(2, 14, 33);
 	
 public:
 	Juego();
@@ -248,37 +251,37 @@ Juego::Juego(){
 void Juego::marcarBordes(){
 	//Bordes de la pantalla de juego
 	for (int i = 1; i < 80; i++){
-		textcolor(BROWN);
+		textcolor(LIGHTGRAY);
 		gotoxy(i, 1);
-		cout << "*";
+		cout << "-";
 	}
 	for (int i = 1; i < 80; i++){
 		gotoxy (i, 30);
-		cout << "*";
+		cout << "-";
 	}
 	for (int i = 1; i < 30; i++){
 		gotoxy(1, i);
-		cout << "*";
+		cout << "-";
 	}
 	for (int i = 1; i < 30; i++){
 		gotoxy(80, i);
-		cout << "*";
+		cout << "-";
 	}
 	
 	//Texto de ayuda
 	gotoxy(3, 4);
-	textcolor(WHITE);
+	textcolor(LIGHTCYAN);
 	cout << "META 1";
 	gotoxy(38, 4);
-	textcolor(WHITE);
+	textcolor(LIGHTCYAN);
 	cout << "META 2";
 	gotoxy(74, 4);
-	textcolor(WHITE);
+	textcolor(LIGHTCYAN);
 	cout << "META 3";
 	
 	//Bordes de las casillas de meta
 	for (int i = 1; i < 4; i++){
-		textcolor(GREEN);
+		textcolor(LIGHTGREEN);
 		gotoxy(i, 5);
 		cout << "*";
 	}
@@ -314,73 +317,40 @@ void Juego::tituloDelJuego(){
 }
 
 void Juego::marcadorVidas(){
-	textcolor(YELLOW);
+	textcolor(LIGHTGRAY);
 	gotoxy(20, 3);
 	cout << "VIDAS: " << rana->obtenerVidas();
 }
 
 void Juego::marcadorPuntaje(){
-	textcolor(YELLOW);
+	textcolor(LIGHTGRAY);
 	gotoxy(50, 3);
 	cout << "PUNTOS: " << rana->puntajeInicial(); 
 }
 
 void Juego::indicadorTeclas(){
-	textcolor(YELLOW);
+	textcolor(LIGHTGRAY);
 	gotoxy(10, 2);
 	cout << "CONTROLES: A - IZQUIERDA, D - DERECHA, W - ARRIBA, S - ABAJO ";
 }
 
 void Juego::chequearColisiones(){
-	switch (JuegoActivo = true) {
-	case 1: if (rana->x == camion->x && rana->y == camion->y) {
-		rana->perderVidas();
-		marcadorVidas();
-	}
-	case 2: if (rana->x == camionDos->x && rana->y == camionDos->y) {
-		rana->perderVidas();
-		marcadorVidas();
-	}
-	case 3: if (rana->x == camionTres->x && rana->y == camionTres->y) {
-		rana->perderVidas();
-		marcadorVidas();
-	}
-	case 4: if (rana->x == camionCuatro->x && rana->y == camionCuatro->y) {
-		rana->perderVidas();
-		marcadorVidas();
-	}
-	case 5: if (rana->x == automobil->x && rana->y == automobil->y) {
-		rana->perderVidas();
-		marcadorVidas();
-	}
-	case 6: if (rana->x == automobilDos->x && rana->y == automobilDos->y) {
-		rana->perderVidas();
-		marcadorVidas();
-	}
-	case 7: if (rana->x == automobilTres->x && rana->y == automobilTres->y) {
-		rana->perderVidas();
-		marcadorVidas();
-	}
-	case 8: if (rana->x == automobilCuatro->x && rana->y == automobilCuatro->y) {
-		rana->perderVidas();
-		marcadorVidas();
-	}
-	case 9: if (rana->x == camioneta->x && rana->y == camioneta->y) {
-		rana->perderVidas();
-		marcadorVidas();
-	}
-	case 10: if (rana->x == camionetaDos->x && rana->y == camionetaDos->y) {
-		rana->perderVidas();
-		marcadorVidas();
-	}
-	case 11: if (rana->x == camionetaTres->x && rana->y == camionetaTres->y) {
-		rana->perderVidas();
-		marcadorVidas();
-	}
-	case 12: if (rana->x == camionetaCuatro->x && rana->y == camionetaCuatro->y) {
-		rana->perderVidas();
-		marcadorVidas();
-	}
+	switch (JuegoActivo) {
+	case 1: if (rana->x == camion->x && rana->y == camion->y) {rana->perderVidas();marcadorVidas();break;}
+	case 2: if (rana->x == camionDos->x && rana->y == camionDos->y) {rana->perderVidas();marcadorVidas();break;}
+	case 3: if (rana->x == camionTres->x && rana->y == camionTres->y) {rana->perderVidas();marcadorVidas();break;}
+	case 4: if (rana->x == camionCuatro->x && rana->y == camionCuatro->y) {rana->perderVidas();marcadorVidas();break;}
+	case 5: if (rana->x == automobil->x && rana->y == automobil->y) {rana->perderVidas();marcadorVidas();break;}
+	case 6: if (rana->x == automobilDos->x && rana->y == automobilDos->y) {rana->perderVidas();marcadorVidas();break;}
+	case 7: if (rana->x == automobilTres->x && rana->y == automobilTres->y) {rana->perderVidas();marcadorVidas();break;}
+	case 8: if (rana->x == automobilCuatro->x && rana->y == automobilCuatro->y) {rana->perderVidas();marcadorVidas();break;}
+	case 9: if (rana->x == camioneta->x && rana->y == camioneta->y) {rana->perderVidas();marcadorVidas();break;}
+	case 10: if (rana->x == camionetaDos->x && rana->y == camionetaDos->y) {rana->perderVidas();marcadorVidas();break;}
+	case 11: if (rana->x == camionetaTres->x && rana->y == camionetaTres->y) {rana->perderVidas();marcadorVidas();break;}
+	case 12: if (rana->x == camionetaCuatro->x && rana->y == camionetaCuatro->y) {rana->perderVidas();marcadorVidas();break;}
+	case 13: if (rana->x == camionetaCinco->x && rana->y == camionetaCinco->y) {rana->perderVidas();marcadorVidas();break;}
+	case 14: if (rana->x == camionCinco->x && rana->y == camionCinco->y) {rana->perderVidas();marcadorVidas();break;}
+	case 15: if (rana->x == automobilCinco->x && rana->y == automobilCinco->y) {rana->perderVidas();marcadorVidas();break;}
 	}
 }
 
@@ -415,12 +385,12 @@ void Juego::llegarMeta(){
 void Juego::finDelJuego(){
 	//Si vidas igual o menor a cero termina el juego de manera negativa
 	if (rana->obtenerVidas() <= 0){
-		textcolor(WHITE);
-		gotoxy(28, 15);
-		cout << "P  E  R  D  I  S  T  E ";
+		textcolor(LIGHTRED);
 		gotoxy(28, 16);
+		cout << "P  E  R  D  I  S  T  E ";
+		gotoxy(28, 18);
 		cout << "I  N  T  E  N  T  A  R  ";
-		gotoxy(25, 17);
+		gotoxy(25, 20);
 		cout << "N  U  E  V  A  M  E  N  T  E  !";
 		JuegoActivo = false;
 	}
@@ -429,10 +399,10 @@ void Juego::finDelJuego(){
 void Juego::ganaste(){
 	//Si obtenemos 150 puntos (casillas de meta completas)termina el juego de manera positiva
 	if (rana->puntajeInicial() == 150){
-		textcolor(WHITE);
-		gotoxy(28, 15);
+		textcolor(LIGHTGREEN);
+		gotoxy(28, 16);
 		cout << "G  A  N  A  S  T  E ";
-		gotoxy(24, 16);
+		gotoxy(24, 118);
 		cout << "B  I  E  N    H  E  C  H  O  !";
 		JuegoActivo = false;
 	}
@@ -460,18 +430,20 @@ void Juego::iniciar(){
 		automobilDos->actualizar();
 		automobilTres->actualizar();
 		automobilCuatro->actualizar();
+		automobilCinco->actualizar();
 		camion->actualizar();
 		camionDos->actualizar();
 		camionTres->actualizar();
 		camionCuatro->actualizar();
+		camionCinco->actualizar();
 		camioneta->actualizar();
 		camionetaDos->actualizar();
 		camionetaTres->actualizar();
 		camionetaCuatro->actualizar();
+		camionetaCinco->actualizar();
 		ganaste();
 		finDelJuego();
 	}
-	
 }
 
 int main (int argc, char *argv[]) {
