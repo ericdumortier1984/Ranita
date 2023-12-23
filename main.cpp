@@ -332,9 +332,55 @@ void Juego::indicadorTeclas(){
 }
 
 void Juego::chequearColisiones(){
-	if (rana->x == camion->x && rana->y == camion->y ||(rana->x == automobil->x && rana->y == automobil->y) || (rana->x == camioneta->x && rana->y == camioneta->y)){
+	switch (JuegoActivo = true) {
+	case 1: if (rana->x == camion->x && rana->y == camion->y) {
 		rana->perderVidas();
 		marcadorVidas();
+	}
+	case 2: if (rana->x == camionDos->x && rana->y == camionDos->y) {
+		rana->perderVidas();
+		marcadorVidas();
+	}
+	case 3: if (rana->x == camionTres->x && rana->y == camionTres->y) {
+		rana->perderVidas();
+		marcadorVidas();
+	}
+	case 4: if (rana->x == camionCuatro->x && rana->y == camionCuatro->y) {
+		rana->perderVidas();
+		marcadorVidas();
+	}
+	case 5: if (rana->x == automobil->x && rana->y == automobil->y) {
+		rana->perderVidas();
+		marcadorVidas();
+	}
+	case 6: if (rana->x == automobilDos->x && rana->y == automobilDos->y) {
+		rana->perderVidas();
+		marcadorVidas();
+	}
+	case 7: if (rana->x == automobilTres->x && rana->y == automobilTres->y) {
+		rana->perderVidas();
+		marcadorVidas();
+	}
+	case 8: if (rana->x == automobilCuatro->x && rana->y == automobilCuatro->y) {
+		rana->perderVidas();
+		marcadorVidas();
+	}
+	case 9: if (rana->x == camioneta->x && rana->y == camioneta->y) {
+		rana->perderVidas();
+		marcadorVidas();
+	}
+	case 10: if (rana->x == camionetaDos->x && rana->y == camionetaDos->y) {
+		rana->perderVidas();
+		marcadorVidas();
+	}
+	case 11: if (rana->x == camionetaTres->x && rana->y == camionetaTres->y) {
+		rana->perderVidas();
+		marcadorVidas();
+	}
+	case 12: if (rana->x == camionetaCuatro->x && rana->y == camionetaCuatro->y) {
+		rana->perderVidas();
+		marcadorVidas();
+	}
 	}
 }
 
@@ -387,7 +433,7 @@ void Juego::ganaste(){
 		gotoxy(28, 15);
 		cout << "G  A  N  A  S  T  E ";
 		gotoxy(24, 16);
-		cout << "B  I  E  N  H  E  C  H  O  !";
+		cout << "B  I  E  N    H  E  C  H  O  !";
 		JuegoActivo = false;
 	}
 }
