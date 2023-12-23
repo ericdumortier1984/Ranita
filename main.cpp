@@ -208,7 +208,7 @@ class Juego {
 private:
 	bool metaOcupada[3];
 	Rana* rana = new Rana(5);
-	Automobil* automobil = new Automobil(2, 15 , 27);
+	Automobil* automobil = new Automobil(2, 13 , 27);
 	Automobil* automobilDos = new Automobil(2, 25, 45);
 	Automobil* automobilTres = new Automobil(2, 17, 38);
 	Automobil* automobilCuatro = new Automobil(2, 8, 23);
@@ -225,6 +225,7 @@ public:
 	Juego();
 	void iniciar();
 	void marcarBordes();
+	void pintarAutopista();
 	void ocultarCursor();
 	void marcadorVidas();
 	void tituloDelJuego();
@@ -293,6 +294,16 @@ void Juego::marcarBordes(){
 		gotoxy(i, 5);
 		cout << "*";
 	}
+}
+
+//zona de descanso
+void Juego::pintarAutopista(){	
+	textbackground(WHITE);
+	for (int i = xMin; i <= xMax; i++) {
+		gotoxy(i, 15);
+		cout << " ";
+	}
+	textbackground(BLACK);
 }
 
 //Menu de indicaciones y titulo del juego
@@ -389,6 +400,7 @@ void Juego::ocultarCursor(){
 
 void Juego::iniciar(){
 	marcarBordes();
+	pintarAutopista();
 	ocultarCursor();
 	tituloDelJuego();
 	marcadorVidas();
