@@ -12,9 +12,10 @@ const int yMin = 1;
 class Personaje{
 protected:
 	clock_t tempo;
+	clock_t tiempoActual;
 	clock_t paso; 
 	int velocidad;
-	int vidas = 3;
+	int vidas = 1;
 	int puntos = 0;
 	void dibujar();
 	void borrar();
@@ -25,8 +26,9 @@ public:
 
 Personaje::Personaje(int vel){
 	velocidad = vel;
-	paso = CLOCKS_PER_SEC/velocidad; 
-	tempo = clock();
+	paso = CLOCKS_PER_SEC/velocidad;//Cada cuanto se mueven los objetos
+	tiempoActual = clock();//Inicia tiempo actual con el reloj
+	tempo = clock();//Inicia tempo con el reloj
 }
 
 void Personaje::borrar(){
@@ -60,7 +62,9 @@ void Rana::dibujar() {
 }
 
 void Rana::actualizar() {
-	if (vidas>0 && tempo+paso<clock()) {
+	tiempoActual = clock();
+	if(vidas > 0){
+		if (tempo + paso < clock()){
 		if (_kbhit()) {
 			borrar();
 			char tecla = _getch();
@@ -70,6 +74,8 @@ void Rana::actualizar() {
 			if (tecla == 's' && y < yMax - 2) { y++; }
 		}
 		dibujar();
+		tempo = tiempoActual;//Actualiza el tiempo
+		}
 	}
 }
 
@@ -116,16 +122,18 @@ void Automobil::dibujar() {
 	cout << "A";
 }
 void Automobil::actualizar() {
-	if(vidas > 0 && tempo+paso<clock() ){
+	tiempoActual = clock();
+	if(vidas > 0){
+		if (tempo + paso < clock()){
 		borrar();
 		x++;
 		if (x > xMax - 4){
 			borrar();
 			x = xMin + 2;
-			tempo = clock();
 		}
 		dibujar();
-		//Sleep(velocidad);
+		tempo = tiempoActual;
+		}
 	}
 }
 
@@ -148,16 +156,18 @@ void Camion::dibujar() {
 }
 
 void Camion::actualizar() {
-	if(vidas > 0 && tempo+paso<clock()){
+	tiempoActual = clock();
+	if(vidas > 0){
+		if (tempo + paso < clock()){
 		borrar();
 		x--;
 		if (x < xMin + 2){
 			borrar();
 			x = xMax - 4;
-			tempo = clock();
 		}
 		dibujar();
-		Sleep(velocidad);
+		tempo = tiempoActual;
+		}
 	}
 }
 
@@ -179,35 +189,37 @@ void Camioneta::dibujar() {
 	cout << "O";
 }
 void Camioneta::actualizar() {
-	if(vidas > 0 && tempo+paso<clock() ){
+	tiempoActual = clock();
+	if(vidas > 0){
+		if (tempo + paso < clock()){
 		borrar();
 		x++;
 		if (x > xMax - 4){
 			borrar();
 			x = xMin + 2;
-			tempo = clock();
 		}
 		dibujar();
-		Sleep(velocidad);
+		tempo = tiempoActual;
+		}
 	}
 }
 
 class Juego {
 private:
 	bool metaOcupada[3];
-	Rana* rana = new Rana(100);
-	Automobil* automobil = new Automobil(2, 15 , 1);
-	Automobil* automobilDos = new Automobil(2, 25, 8);
-	Automobil* automobilTres = new Automobil(2, 17, 12);
+	Rana* rana = new Rana(5);
+	Automobil* automobil = new Automobil(2, 15 , 27);
+	Automobil* automobilDos = new Automobil(2, 25, 45);
+	Automobil* automobilTres = new Automobil(2, 17, 38);
 	Automobil* automobilCuatro = new Automobil(2, 8, 23);
-	Camion* camion = new Camion(78, 10, 9);
-	Camion* camionDos = new Camion(78, 6, 13);
+	Camion* camion = new Camion(78, 10, 35);
+	Camion* camionDos = new Camion(78, 6, 52);
 	Camion* camionTres = new Camion(78, 20, 25);
-	Camion* camionCuatro = new Camion(78, 24, 7);
-	Camioneta* camioneta = new Camioneta(2, 19, 3);
-	Camioneta* camionetaDos = new Camioneta(2, 21, 11);
+	Camion* camionCuatro = new Camion(78, 24, 18);
+	Camioneta* camioneta = new Camioneta(2, 19, 40);
+	Camioneta* camionetaDos = new Camioneta(2, 21, 21);
 	Camioneta* camionetaTres = new Camioneta(2, 7, 19);
-	Camioneta* camionetaCuatro = new Camioneta(2, 26, 16);
+	Camioneta* camionetaCuatro = new Camioneta(2, 26, 43);
 	
 public:
 	Juego();
@@ -251,6 +263,7 @@ void Juego::marcarBordes(){
 		gotoxy(80, i);
 		cout << "*";
 	}
+	
 	//Texto de ayuda
 	gotoxy(3, 4);
 	textcolor(WHITE);
@@ -261,6 +274,7 @@ void Juego::marcarBordes(){
 	gotoxy(74, 4);
 	textcolor(WHITE);
 	cout << "META 3";
+	
 	//Bordes de las casillas de meta
 	for (int i = 1; i < 4; i++){
 		textcolor(GREEN);
@@ -281,6 +295,7 @@ void Juego::marcarBordes(){
 	}
 }
 
+//Menu de indicaciones y titulo del juego
 void Juego::tituloDelJuego(){
 	textcolor(LIGHTGREEN);
 	gotoxy(36, 3);
@@ -314,28 +329,28 @@ void Juego::chequearColisiones(){
 
 void Juego::llegarMeta(){
 	//llegamos a la casilla, si la misma está ocupada se reinicia la posición pero sin sumar puntos
-	if ((rana->x == 4 && rana->y == 4) && !metaOcupada[0]) {
+	if ((rana->x == 4 && rana->y == 5) && !metaOcupada[0]) {
 		rana->obtenerPuntos();
 		marcadorPuntaje();
 		rana->reiniciarPosicion();
 		metaOcupada[0] = true; 
-	}else if ((rana->x == 4 && rana->y == 4) && metaOcupada[0]) {
+	}else if ((rana->x == 4 && rana->y == 5) && metaOcupada[0]) {
 		rana->reiniciarPosicion(); 
     }
-	if ((rana->x == 40 && rana->y == 4) && !metaOcupada[1]) {
+	if ((rana->x == 40 && rana->y == 5) && !metaOcupada[1]) {
 		rana->obtenerPuntos();
 		marcadorPuntaje();
 		rana->reiniciarPosicion();
 		metaOcupada[1] = true;
-	}else if ((rana->x == 40 && rana->y == 4) && metaOcupada[1]) {
+	}else if ((rana->x == 40 && rana->y == 5) && metaOcupada[1]) {
 		rana->reiniciarPosicion();
 	}
-	if ((rana->x == 76 && rana->y == 4) && !metaOcupada[2]) {
+	if ((rana->x == 76 && rana->y == 5) && !metaOcupada[2]) {
 		rana->obtenerPuntos();
 		marcadorPuntaje();
 		rana->reiniciarPosicion();
 		metaOcupada[2] = true; 
-	}else if ((rana->x == 76 && rana->y == 4) && metaOcupada[2]) {
+	}else if ((rana->x == 76 && rana->y == 5) && metaOcupada[2]) {
 		rana->reiniciarPosicion();
 	}
 }
@@ -367,6 +382,7 @@ void Juego::ganaste(){
 }
 
 void Juego::ocultarCursor(){
+	//Ocultamos el cursor
 	CONSOLE_CURSOR_INFO cci = {100, FALSE};
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cci);
 }
@@ -394,9 +410,10 @@ void Juego::iniciar(){
 		camionetaDos->actualizar();
 		camionetaTres->actualizar();
 		camionetaCuatro->actualizar();
-		finDelJuego();
 		ganaste();
+		finDelJuego();
 	}
+	
 }
 
 int main (int argc, char *argv[]) {
