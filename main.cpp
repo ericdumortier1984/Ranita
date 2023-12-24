@@ -70,7 +70,7 @@ void Rana::actualizar() {
 			char tecla = _getch();
 			if (tecla == 'a' && x > xMin + 2) { x--; }
 			if (tecla == 'd' && x < xMax - 2) { x++; }
-			if (tecla == 'w' && y > yMin + 3) { y--; }
+			if (tecla == 'w' && y > yMin + 4) { y--; }
 			if (tecla == 's' && y < yMax - 2) { y++; }
 		}
 		dibujar();
